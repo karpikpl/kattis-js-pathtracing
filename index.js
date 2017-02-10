@@ -98,6 +98,19 @@ function solution(toPrint, toRead) {
 
         map[position.y][position.x] = '*';
     });
+    // put last item
+    switch (moves[moves.length-1]) {
+        case 'up':
+            position.y--;
+            break;
+        case 'down':
+            position.y++;
+            break;
+        case 'left':
+            position.x--;
+            break;
+        case 'right':
+            position.x++;
     map[position.y][position.x] = 'E';
 
     const border = emptyRow.slice();
