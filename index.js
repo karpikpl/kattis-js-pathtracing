@@ -4,39 +4,114 @@
 // put your solution in this method
 function solution(toPrint, toRead) {
 
-    const input = readline().split(' ');
-    const dice1 = parseInt(input[0]);
-    const dice2 = parseInt(input[1]);
+    const moves = [];
 
-    log(`Parsed input dice 1: ${dice1} dice 2: ${dice2}`);
+    const borders = {
+        'up': 0,
+        'down': 0,
+        'left': 0,
+        'right': 0
+    }
 
-    const results = {};
-    let maxProb = 0;
+    const position = {
+        x: 0,
+        y: 0
+    };
 
-    for (let i = 1; i <= dice1; i++)
-        for (let j = 1; j <= dice2; j++) {
-            const prob = (1 / dice1) + (1 / dice2);
-            const sum = i + j;
+    let input;
+    while (input = readline()) {
+        moves.push(input);
 
-            results[sum] = (results[sum] || 0) + prob;
+        switch (input) {
+            case 'up':
+                position.y++;
+                borders[input] = Math.max(borders[input], position.y);
+                break;
+            case 'down':
+                position.y--;
+                borders[input] = Math.min(borders[input], position.y);
+                break;
+            case 'left':
+                position.x--;
+                borders[input] = Math.min(borders[input], position.x);
+                break;
+            case 'right':
+                position.x++;
+                borders[input] = Math.max(borders[input], position.x);
+                break;
+        }
+    }
+
+    log(`Parsed input: ${moves}`);
+    log(`position: ${JSON.stringify(position)}`);
+    log(`borders: ${JSON.stringify(borders)}`);
+
+    // build map
+    const map = [];
+
+    // start row
+    // const startRow = [];
+    // for (let i = 0; i < Math.abs(borders.left); i++) {
+    //   startRow.push(' ');
+    // }
+    // startRow.push('S');
+    // for (let i = 0; i < borders.right; i++) {
+    //   startRow.push(' ');
+    // }
+    // log(startRow);
+
+    const emptyRow = [];
+    for (var i = 0; i < Math.abs(borders.left) + borders.right + 1; i++) {
+        emptyRow.push(' ');
+    }
+
+    position.y = 0;
+    position.x = Math.abs(borders.left);
+    map.push(emptyRow.slice());
+    map[position.y][position.x] = 'S';
+
+    for (var i = 0; i < borders.up; i++) {
+        position.y++;
+        map.unshift(emptyRow.slice());
+    }
+    for (var i = 0; i < Math.abs(borders.down); i++) {
+        map.push(emptyRow.slice());
+    }
+
+    log(`is S on position: ${JSON.stringify(position)}? ${map[position.y][position.x] === 'S'}`);
+
+    moves.forEach(m => {
+        switch (m) {
+            case 'up':
+                position.y--;
+                break;
+            case 'down':
+                position.y++;
+                break;
+            case 'left':
+                position.x--;
+                break;
+            case 'right':
+                position.x++;
+                break;
         }
 
-    let sums = [];
+        map[position.y][position.x] = '*';
+    });
+    map[position.y][position.x] = 'E';
 
-    Object.keys(results).forEach((o) => sums.push({
-        prob: results[o],
-        sum: o
-    }));
+    const border = emptyRow.slice();
+    border.forEach((c,i) => border[i] = '#');
+    border.push('#');
+    border.push('#');
 
-    sums = sums.sort((a, b) => b.prob - a.prob);
-    const max = sums[0].prob;
+    map.forEach(row => {row.unshift('#'); row.push('#')});
+    map.unshift(border);
+    map.push(border);
 
-    //log(sums);
+    log(map);
 
-    sums
-        .filter(s => s.prob == max)
-        .sort((a, b) => a.sum - b.sum)
-        .forEach(s => print(s.sum));
+    map.forEach(row => print(row.join('')));
 }
 
 // run solution without any params for kattis
@@ -63,10 +138,7 @@ if (typeof process !== 'undefined' && process.argv[2] === 'i') {
     const Readline = require('readline');
     const input = [];
 
-    const inputProcessor = Readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
+    const inputProcessor = Readline.createInterface({input: process.stdin, output: process.stdout});
 
     inputProcessor.on('line', (line) => {
 
@@ -94,9 +166,9 @@ if (typeof process !== 'undefined' && process.argv[2] && process.argv[2] !== 'i'
     solution();
 }
 
-function log(){
+function log() {
 
-    if(typeof process !== 'undefined' && process.release.name === 'node') {
+    if (typeof process !== 'undefined' && process.release.name === 'node') {
         console.log.call(this, ...arguments);
     }
 }
