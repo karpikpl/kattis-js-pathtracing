@@ -41,13 +41,71 @@ describe('Solution', function() {
                 ]
             },
             {
+                input: [
+                    'down',
+                    'down',
+                    'left',
+                    'left',
+                    'up',
+                    'up',
+                    'left',
+                    'left',
+                    'up',
+                    'right',
+                    'right',
+                    'right',
+                    'down',
+                    'down'
+                ],
+                result: [
+                    '#######',
+                    '#**** #',
+                    '#****S#',
+                    '#  *E*#',
+                    '#  ***#',
+                    '#######'
+                ]
+            },
+            {
                 input: ['up'],
                 result: [
                     '###',
                     '#E#',
-                    '#*#',
                     '#S#',
                     '###'
+                ]
+            },
+            {
+                input: ['down'],
+                result: [
+                    '###',
+                    '#S#',
+                    '#E#',
+                    '###'
+                ]
+            },
+            {
+                input: ['left'],
+                result: [
+                    '####',
+                    '#ES#',
+                    '####'
+                ]
+            },
+            {
+                input: ['right'],
+                result: [
+                    '####',
+                    '#SE#',
+                    '####'
+                ]
+            },
+            {
+                input: ['left', 'left', 'left'],
+                result: [
+                    '######',
+                    '#E**S#',
+                    '######'
                 ]
             }
 

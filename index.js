@@ -79,6 +79,7 @@ function solution(toPrint, toRead) {
     }
 
     log(`is S on position: ${JSON.stringify(position)}? ${map[position.y][position.x] === 'S'}`);
+    const start = {x : position.x, y : position.y};
 
     moves.forEach(m => {
         switch (m) {
@@ -99,26 +100,18 @@ function solution(toPrint, toRead) {
         map[position.y][position.x] = '*';
     });
     // put last item
-    switch (moves[moves.length-1]) {
-        case 'up':
-            position.y--;
-            break;
-        case 'down':
-            position.y++;
-            break;
-        case 'left':
-            position.x--;
-            break;
-        case 'right':
-            position.x++;
     map[position.y][position.x] = 'E';
+    map[start.y][start.x]= 'S';
 
     const border = emptyRow.slice();
-    border.forEach((c,i) => border[i] = '#');
+    border.forEach((c, i) => border[i] = '#');
     border.push('#');
     border.push('#');
 
-    map.forEach(row => {row.unshift('#'); row.push('#')});
+    map.forEach(row => {
+        row.unshift('#');
+        row.push('#')
+    });
     map.unshift(border);
     map.push(border);
 
@@ -151,7 +144,10 @@ if (typeof process !== 'undefined' && process.argv[2] === 'i') {
     const Readline = require('readline');
     const input = [];
 
-    const inputProcessor = Readline.createInterface({input: process.stdin, output: process.stdout});
+    const inputProcessor = Readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
 
     inputProcessor.on('line', (line) => {
 
